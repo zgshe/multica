@@ -1,17 +1,45 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { MulticaIcon } from "@multica/ui/components/common/multica-icon";
 import { cn } from "@multica/ui/lib/utils";
 import { useAuthStore } from "@multica/core/auth";
 import { captureDownloadIntent } from "@multica/core/analytics";
 import { XMark, GitHubMark, githubUrl, twitterUrl } from "./shared";
 import { useLocale, locales, localeLabels } from "../i18n";
+import { Button } from "@multica/ui/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@multica/ui/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 export function LandingFooter() {
   const { t, locale, setLocale } = useLocale();
   const user = useAuthStore((s) => s.user);
   const groups = Object.values(t.footer.groups);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [upgrading, setUpgrading] = useState(false);
+
+  async function handleUpgrade() {
+    setUpgrading(true);
+    try {
+      const resp = await fetch("/api/admin/upgrade", { method: "POST" });
+      if (!resp.ok) throw new Error("Upgrade failed");
+      toast.success("Upgrade completed successfully");
+      setUpgradeOpen(false);
+      window.location.reload();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Upgrade failed");
+    } finally {
+      setUpgrading(false);
+    }
+  }
 
   return (
     <footer className="bg-[#0a0d12] text-white">
@@ -46,6 +74,13 @@ export function LandingFooter() {
               >
                 <GitHubMark className="size-4" />
               </Link>
+              <button
+                type="button"
+                onClick={() => setUpgradeOpen(true)}
+                className="text-white/40 transition-colors hover:text-white text-[12px] border border-white/20 rounded px-2 py-1"
+              >
+                {t.footer.thirdPartyUpdate || "三方更新"}
+              </button>
             </div>
             <div className="mt-6">
               <Link
@@ -130,6 +165,25 @@ export function LandingFooter() {
           </div>
         </div>
       </div>
+
+      <AlertDialog open={upgradeOpen} onOpenChange={setUpgradeOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t.footer.thirdPartyUpdate || "三方更新"}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t.footer.thirdPartyUpdateDesc || "将原版 multica 与 Gitee 修改合并。升级前请确保已提交当前修改。"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button variant="outline" onClick={() => setUpgradeOpen(false)} disabled={upgrading}>
+              {t.footer.cancel || "取消"}
+            </Button>
+            <Button onClick={handleUpgrade} disabled={upgrading}>
+              {upgrading ? (t.footer.upgrading || "升级中...") : (t.footer.confirmUpgrade || "确认升级")}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </footer>
   );
 }

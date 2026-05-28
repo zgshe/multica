@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { MulticaLanding } from "@/features/landing/components/multica-landing";
 import { RedirectIfAuthenticated } from "@/features/landing/components/redirect-if-authenticated";
+import { LandingFooter } from "@/features/landing/components/landing-footer";
 
 export const metadata: Metadata = {
   title: {
@@ -24,6 +25,7 @@ export default function LandingPage() {
     <>
       <RedirectIfAuthenticated />
       <MulticaLanding />
+      <LandingFooter />
     </>
   );
 }

@@ -274,7 +274,10 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 	// GitHub App webhook (no Multica auth — requests are authenticated via
 	// HMAC-SHA256 signature in the handler) and post-install setup callback.
 	r.Post("/api/webhooks/github", h.HandleGitHubWebhook)
+	r.Post("/api/webhooks/gitee", h.HandleGiteeWebhook)
 	r.Get("/api/github/setup", h.GitHubSetupCallback)
+	// Admin upgrade endpoint (executes upgrade script)
+	r.Post("/api/admin/upgrade", h.HandleAdminUpgrade)
 
 	// Daemon API routes (require daemon token or valid user token)
 	r.Route("/api/daemon", func(r chi.Router) {

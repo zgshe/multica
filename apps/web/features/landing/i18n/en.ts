@@ -227,6 +227,11 @@ export function createEnDict(allowSignup: boolean): LandingDict {
     tagline:
       "Project management for human + agent teams. Open source, self-hostable, built for the future of work.",
     cta: "Get started",
+    thirdPartyUpdate: "Third-party Update",
+    thirdPartyUpdateDesc: "Pull latest multica updates while preserving local Gitee modifications",
+    cancel: "Cancel",
+    confirmUpgrade: "Confirm Upgrade",
+    upgrading: "Upgrading...",
     groups: {
       product: {
         label: "Product",

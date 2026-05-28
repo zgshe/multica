@@ -87,6 +87,11 @@ export type LandingDict = {
   footer: {
     tagline: string;
     cta: string;
+    thirdPartyUpdate: string;
+    thirdPartyUpdateDesc: string;
+    cancel: string;
+    confirmUpgrade: string;
+    upgrading: string;
     groups: {
       product: FooterGroup;
       resources: FooterGroup;

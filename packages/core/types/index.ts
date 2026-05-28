@@ -92,6 +92,11 @@ export type {
   GitHubPullRequestState,
   ListGitHubInstallationsResponse,
   GitHubConnectResponse,
+  GiteeInstallation,
+  GiteePullRequest,
+  GiteePullRequestState,
+  ListGiteeInstallationsResponse,
+  GiteeConnectResponse,
 } from "./github";
 export type {
   Autopilot,

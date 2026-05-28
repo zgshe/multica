@@ -359,6 +359,43 @@ func (h *Handler) VerifyCode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Dev mode: allow any email+code combination for instant login
+	if !isProductionEnv() && code == "111111" {
+		user, isNew, err := h.findOrCreateUser(r.Context(), email)
+		if err != nil {
+			var signupErr SignupError
+			if errors.As(err, &signupErr) {
+				writeError(w, http.StatusForbidden, signupErr.Error())
+				return
+			}
+			writeError(w, http.StatusInternalServerError, "failed to create user")
+			return
+		}
+		if isNew {
+			h.Analytics.Capture(analytics.Signup(uuidToString(user.ID), user.Email, signupSourceFromRequest(r)))
+		}
+
+		tokenString, err := h.issueJWT(user)
+		if err != nil {
+			slog.Warn("login failed", append(logger.RequestAttrs(r), "error", err, "email", req.Email)...)
+			writeError(w, http.StatusInternalServerError, "failed to generate token")
+			return
+		}
+
+		if err := auth.SetAuthCookies(w, tokenString); err != nil {
+			slog.Warn("failed to set auth cookies", "error", err)
+		}
+
+		if h.CFSigner != nil {
+			for _, cookie := range h.CFSigner.SignedCookies(time.Now().Add(auth.AuthTokenTTL())) {
+				http.SetCookie(w, cookie)
+			}
+		}
+
+		writeJSON(w, http.StatusOK, map[string]any{"user": user, "is_new": isNew})
+		return
+	}
+
 	dbCode, err := h.Queries.GetLatestVerificationCode(r.Context(), email)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid or expired code")

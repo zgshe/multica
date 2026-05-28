@@ -33,7 +33,8 @@
       "github": "GitHub",
       "integrations": "集成",
       "labs": "实验室",
-      "members": "成员"
+      "members": "成员",
+      "gitee": "Gitee"
     }
   },
   "account": {
@@ -216,6 +217,42 @@
     "repositories_shortcut_label": "仓库 URL 仍在「代码仓库」标签页中管理",
     "repositories_shortcut_link": "前往管理 →",
     "toast_failed": "更新 GitHub 设置失败"
+  },
+  "gitee": {
+    "page_description": "连接 Gitee 应用，控制合并请求在 Multica 中的显示方式。",
+    "section_master": "启用 Gitee 功能",
+    "master_description_on": "关闭后，所有 Gitee 界面功能将被隐藏，不再产生新的副作用。",
+    "master_description_off": "Gitee 功能已关闭。",
+    "section_connection": "连接",
+    "connection_title": "Gitee 应用",
+    "connection_description": "自动将问题与合并请求关联。",
+    "connected_to": "已连接到 {{login}}",
+    "connect_gitee": "连接 Gitee",
+    "connect_opening": "正在打开...",
+    "connect_disabled_tooltip": "Gitee 应用未在此服务器配置",
+    "disconnect": "断开连接",
+    "disconnecting": "断开中...",
+    "disconnect_confirm_title": "断开 Gitee 应用",
+    "disconnect_confirm_description": "Multica 将停止接收此安装的 webhooks。",
+    "disconnect_confirm_cancel": "取消",
+    "disconnect_confirm_action": "断开",
+    "not_configured": "Gitee 集成未在此部署中配置。",
+    "read_only_hint": "只读视图。只有工作区管理员和所有者可以连接或断开 Gitee。",
+    "contact_admin_to_connect": "Gitee 未连接到该工作区。",
+    "connected_by": "由 {{name}} 连接",
+    "toast_not_configured": "Gitee 集成未配置",
+    "toast_open_failed": "无法打开 Gitee 安装页面",
+    "toast_disconnect_failed": "断开 Gitee 应用失败",
+    "toast_disconnected": "Gitee 应用已断开",
+    "section_features": "功能",
+    "feature_pr_sidebar_label": "合并请求侧边栏",
+    "feature_pr_sidebar_description": "在问题详情侧边栏中显示关联的合并请求。",
+    "feature_auto_link_label": "自动关联问题和 MR",
+    "feature_auto_link_description": "将 MR 标题、正文和分支名称与问题标识符匹配并自动创建关联。",
+    "section_repositories": "代码仓库",
+    "repositories_shortcut_label": "仓库 URL 仍在「代码仓库」标签页中管理",
+    "repositories_shortcut_link": "前往管理 →",
+    "toast_failed": "更新 Gitee 设置失败"
   },
   "repositories": {
     "section_title": "代码仓库",

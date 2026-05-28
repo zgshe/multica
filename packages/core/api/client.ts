@@ -99,6 +99,8 @@ import type {
   GitHubPullRequest,
   ListGitHubInstallationsResponse,
   GitHubConnectResponse,
+  ListGiteeInstallationsResponse,
+  GiteeConnectResponse,
   Squad,
   SquadMember,
   SquadMemberStatusListResponse,
@@ -1848,5 +1850,20 @@ export class ApiClient {
 
   async listIssuePullRequests(issueId: string): Promise<{ pull_requests: GitHubPullRequest[] }> {
     return this.fetch(`/api/issues/${issueId}/pull-requests`);
+  }
+
+  // Gitee integration
+  async getGiteeConnectURL(workspaceId: string): Promise<GiteeConnectResponse> {
+    return this.fetch(`/api/workspaces/${workspaceId}/gitee/connect`);
+  }
+
+  async listGiteeInstallations(workspaceId: string): Promise<ListGiteeInstallationsResponse> {
+    return this.fetch(`/api/workspaces/${workspaceId}/gitee/installations`);
+  }
+
+  async deleteGiteeInstallation(workspaceId: string, installationId: string): Promise<void> {
+    await this.fetch(`/api/workspaces/${workspaceId}/gitee/installations/${installationId}`, {
+      method: "DELETE",
+    });
   }
 }

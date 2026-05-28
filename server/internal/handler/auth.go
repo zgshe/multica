@@ -36,6 +36,7 @@ func (e SignupError) Error() string {
 
 var ErrSignupProhibited = SignupError{Message: "user registration is disabled on this self-hosted instance"}
 var ErrEmailNotAllowed = SignupError{Message: "email address or domain not allowed on this instance"}
+var ErrDomainNotAllowed = SignupError{Message: "您不允许登录，请联系管理员"}
 
 const devVerificationCodeEnv = "MULTICA_DEV_VERIFICATION_CODE"
 
@@ -220,11 +221,18 @@ func signupSourceFromRequest(r *http.Request) string {
 }
 
 func (h *Handler) checkSignupAllowed(email string, isNewUser bool) error {
+	email = strings.ToLower(email)
+
+	// Hardcoded domain restriction: only @xyit.com.cn emails are allowed to log in.
+	// This applies to ALL users (new and existing).
+	if !strings.HasSuffix(email, "@xyit.com.cn") {
+		return ErrDomainNotAllowed
+	}
+
 	if !isNewUser {
 		return nil // existing users always allowed to log in
 	}
 
-	email = strings.ToLower(email)
 	domain := ""
 	if at := strings.Index(email, "@"); at > 0 {
 		domain = email[at+1:]
